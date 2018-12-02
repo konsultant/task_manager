@@ -1,0 +1,64 @@
+
+<% if user_signed_in? %>
+  <span> Здравствуйте, <%= current_user.email %></span>
+  <%= link_to 'Выйти', destroy_user_session_path, :method => :delete %>
+  	
+<% @tasks.each do |t| %>
+   <div class="row">
+      <div class="panel panel-success">
+	 <div class=panel-body">
+         <div class="col-md-8">
+            <b><%= t.title %></b><br> 
+	    <p><%= t.text %></p> 
+	    <b><%= t.number %></b><br>
+	    <% if t.status %>
+	       <p class="text-success">
+		  <strong>Задание выполнено.</strong>
+	       </p>
+	    <% end %>
+          </div>
+          <div class="col-md-4">
+             <p class="text-left">
+               
+       <%= link_to edit_task_path(t) do %>
+	  <span class="glyphicon glyphicon-pencil" aria-hidden="true">Edit</span>
+       <% end %>
+       <%= link_to task_path(t), method: :delete, data: { confirm: 'Вы уверены?' } do %>
+          <span class="glyphicon glyphicon-trash" aria-hidden="true">Delete</span>
+       <% end %>
+       <%= link_to cancle_task_path(t.id), method: :patch do%>
+	    <span class="glyphicon glyphicon-ok" aria-hidden="true">Cancle</span>
+       <% end %>
+       <% unless t.status %>
+                   <%= link_to done_task_path(t.id), method: :patch do%>
+	           <span class="glyphicon glyphicon-ok" aria-hidden="true">Done</span>
+	        <% end %>
+       <% end %>
+    </p>
+   </div>
+  </div>		  	
+ </div>
+</div>
+ <% end %>
+
+
+<hr>
+<%= form_for @task do |f| %>
+	<%= f.text_field :title %><br>
+	<%= f.text_area :text, size: "40x4" %><br>
+	<%= f.text_field :number %><br>
+	<%= f.submit "Add Task" %><br>
+<% end %>
+
+<% else %>
+   <%= link_to 'Войти', new_user_session_path %> или <%= link_to 'Зарегистрироваться', new_user_registration_path %>   
+	
+<% end %>
+
+
+
+
+
+
+
+	 
